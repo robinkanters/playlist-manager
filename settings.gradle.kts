@@ -1,1 +1,1 @@
-rootProject.name = "no.kanters.playlistmgr"
+rootProject.name = "playlistmgr"

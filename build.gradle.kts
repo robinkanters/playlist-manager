@@ -11,7 +11,7 @@ group = "no.kanters"
 version = "0.0.1"
 
 application {
-    mainClass.set("no.kanters.ApplicationKt")
+    mainClass.set("no.kanters.playlistmgr.ApplicationKt")
 }
 
 repositories {

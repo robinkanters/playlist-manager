@@ -1,8 +1,6 @@
 package no.kanters.playlistmgr.controllers
 
-import io.ktor.http.*
 import io.ktor.locations.*
-import kotlinx.css.h2
 import kotlinx.html.*
 import kotlinx.html.FormMethod.post
 import kotlinx.html.InputType.submit
@@ -10,6 +8,7 @@ import kotlinx.html.InputType.text
 import kotlinx.html.stream.createHTML
 import no.kanters.playlistmgr.logic.PlaylistParser
 import no.kanters.playlistmgr.routing.Playlists
+import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.io.path.Path
 import kotlin.io.path.listDirectoryEntries
@@ -19,6 +18,11 @@ class PlaylistController(
     private val playlistParser: PlaylistParser,
     private val path: String
 ) {
+    init {
+        LoggerFactory.getLogger(PlaylistController::class.java.simpleName)
+            .info("Using playlist files from $path")
+    }
+
     private val playlists: List<String>
         get() = Path(path).listDirectoryEntries("*.txt").map { it.fileName.toString().dropLast(4) }
 
@@ -38,14 +42,14 @@ class PlaylistController(
         }
     }
 
-    private fun getFile(name: String -> File(path, "${name}.txt") }
+    private fun getFile(name: String) = File(path, "${name}.txt")
     fun create(name: Playlists.Create): String {
-        return if (getFile()(name.name).createNewFile()) {
+        return if (!name.name.isNullOrBlank() && getFile(name.name).createNewFile()) {
             createHTML().div {
                 h2 { +"Playlist created" }
                 ul {
                     li { a(locations.href(Playlists)) { +"< to list" } }
-                    li { a(locations.href(Playlists.Edit(name.name!!))) { +"edit >" } }
+                    li { a(locations.href(Playlists.Edit(name.name))) { +"edit >" } }
                 }
             }
         } else {

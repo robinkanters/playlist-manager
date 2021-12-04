@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build code
+      run: ./gradlew assembleDist && mv build/libs/playlistmgr-*.jar ./playlistmgr.jar
+    - name: docker login
+      env:
+        DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
+        DOCKER_HUB_ACCESS_TOKEN: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
+      run: |
+        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_ACCESS_TOKEN 
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag robinkanters/playlistmanager:$(date +%s) --tag robinkanters/playlistmanager:latest
+      
+    - name: Docker Push
+      run: docker push -a robinkanters/playlistmanager
