@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build code
-      run: ./gradlew assembleDist && mv build/libs/playlistmgr-*.jar ./playlistmgr.jar
+      run: ./gradlew installDist
     - name: docker login
       env:
         DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
