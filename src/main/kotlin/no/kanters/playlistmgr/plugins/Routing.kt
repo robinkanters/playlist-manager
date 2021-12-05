@@ -2,6 +2,7 @@ package no.kanters.playlistmgr.plugins
 
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.http.ContentType.Text.Html
 import io.ktor.http.HttpStatusCode.Companion.OK
@@ -12,9 +13,9 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import no.kanters.playlistmgr.controllers.PlaylistController
 import no.kanters.playlistmgr.controllers.PlaylistSongController
-import no.kanters.playlistmgr.controllers.PlaylistView
 import no.kanters.playlistmgr.routing.Playlists
 import no.kanters.playlistmgr.routing.Songs
+import no.kanters.playlistmgr.views.PlaylistView
 
 fun Application.configureRouting() {
     install(Locations)
@@ -52,13 +53,16 @@ fun Application.configureRouting() {
             }
         }
 
+        suspend fun ApplicationCall.respondFreeMarker(template: String, model: Any?) = respond(FreeMarkerContent(template, model))
+
         get<Songs.New> {
-            call.respondText(Html, OK) {
-                playlistSongController.new(it, call.locations)
-            }
+            call.respondFreeMarker(
+                "song_new",
+                PlaylistSongController.NewPayload(it.parent.name)
+            )
         }
 
-        get<Songs.Create> {
+        post<Songs.Create> {
             call.respondText(Html, OK) {
                 val data = Songs.Create.parsePayload(call.receiveParameters())
                 playlistSongController.create(it, data)

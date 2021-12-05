@@ -1,8 +1,6 @@
-package no.kanters.playlistmgr.controllers
+package no.kanters.playlistmgr.models
 
 import java.net.URI
-
-data class Playlist(val name: String, val entries: List<PlaylistEntry>)
 
 sealed class PlaylistEntry(open val comment: String?) {
     data class LineComment(override val comment: String) : PlaylistEntry(comment)

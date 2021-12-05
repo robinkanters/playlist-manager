@@ -1,7 +1,7 @@
 package no.kanters.playlistmgr.logic
 
-import no.kanters.playlistmgr.controllers.PlaylistEntry
-import no.kanters.playlistmgr.controllers.PlaylistEntry.*
+import no.kanters.playlistmgr.models.PlaylistEntry
+import no.kanters.playlistmgr.models.PlaylistEntry.*
 import java.io.File
 import java.net.URI
 import kotlin.io.path.Path

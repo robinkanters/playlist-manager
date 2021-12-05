@@ -1,6 +1,7 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val korte_version: String by project
 
 plugins {
     application
@@ -22,6 +23,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
     implementation("io.ktor:ktor-html-builder:$ktor_version")
+    implementation("io.ktor:ktor-freemarker:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("org.jetbrains:kotlin-css-jvm:1.0.0-pre.129-kotlin-1.4.20")
     implementation("io.ktor:ktor-server-host-common:$ktor_version")
