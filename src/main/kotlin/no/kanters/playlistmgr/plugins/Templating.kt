@@ -5,8 +5,6 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.css.*
-import kotlinx.css.BorderStyle.solid
-import kotlinx.css.BorderStyle.valueOf
 import kotlinx.css.Color.Companion.white
 import kotlinx.css.Display.block
 import kotlinx.css.FontStyle.Companion.italic

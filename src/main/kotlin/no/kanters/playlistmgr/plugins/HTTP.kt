@@ -1,9 +1,7 @@
 package no.kanters.playlistmgr.plugins
 
-import io.ktor.features.*
 import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
+import io.ktor.features.*
 
 fun Application.configureHTTP() {
     install(HSTS) {
