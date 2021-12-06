@@ -42,8 +42,8 @@
                             : $("#ytsearch").prop("checked") ? "https://www.youtube.com/results?search_query=" + encodeURIComponent($queryField.val())
                             : null;
                     testLink.attr('href', link);
-                    if (!link) testLink.stop().hide('slow');
-                    else testLink.stop().show('slow');
+                    if (!link) testLink.stop().fadeOut('fast');
+                    else testLink.stop().fadeIn('fast');
                 }
 
                 updateTestLink();
