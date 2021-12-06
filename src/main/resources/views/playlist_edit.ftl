@@ -14,6 +14,9 @@
         <ul class="playlist-entries">
             <#list playlist.entries as entry>
                 <li>
+                    <#if entry.comment?? && entry.comment?length &gt; 0 && getEntryType.invoke(entry) != 'LineComment'>
+                        <span class="comment">${entry.comment}</span>
+                    </#if>
                     <#switch getEntryType.invoke(entry)>
                         <#case 'Shuffle'>
                             &lt;&lt; Shuffle Playlist &gt;&gt;
