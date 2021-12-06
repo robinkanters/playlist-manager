@@ -37,7 +37,7 @@
                 $queryField.keyup(updateTestLink);
 
                 function updateTestLink() {
-                    const link =
+                    const link = $queryField.val().length === 0 ? null :
                         $urlField.prop("checked") && /^https?:\/\//.test($queryField.val()) ? $queryField.val()
                             : $("#ytsearch").prop("checked") ? "https://www.youtube.com/results?search_query=" + encodeURIComponent($queryField.val())
                             : null;
