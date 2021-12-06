@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="playlist" type="no.kanters.playlistmgr.models.Playlist" -->
 <#-- @ftlvariable name="getEntryType" type="kotlin.jvm.functions.Function1<no.kanters.playlistmgr.models.PlaylistEntry, String>" -->
-<#-- @ftlvariable name="urlencode" type="kotlin.jvm.functions.Function1<String, String>" -->
+<#-- @ftlvariable name="yturl" type="kotlin.jvm.functions.Function1<String, String>" -->
 <#-- @ftlvariable name="backLink" type="String" -->
 <#-- @ftlvariable name="newLink" type="String" -->
 <#include "_base.ftl">
@@ -26,14 +26,9 @@
                             ${entry.url}
                             <#break/>
                         <#case 'YoutubeSearch'>
-                        <#-- @ftlvariable name="entry" type="no.kanters.playlistmgr.models.PlaylistEntry.YoutubeSearch" -->
                             YouTube Search:
                         <#--noinspection FtlReferencesInspection-->
-                            "<a href="https://www.youtube.com/results?search_query=${urlencode.invoke(entry.query)}"
-                                target="_blank">
-                            <#--noinspection FtlReferencesInspection-->
-                            ${entry.query}
-                        </a>"
+                            "<a href="${yturl.invoke(entry.query)}" target="_blank">${entry.query}</a>"
                             <#break/>
                     </#switch>
                 </li>

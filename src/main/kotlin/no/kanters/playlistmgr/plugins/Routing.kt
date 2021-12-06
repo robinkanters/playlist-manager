@@ -55,7 +55,7 @@ fun Application.configureRouting() {
                     "newLink" to call.locations.href(Songs.New(Songs(playlist.name))),
                     "playlist" to playlist,
                     "getEntryType" to { entry: PlaylistEntry -> entry::class.java.simpleName },
-                    "urlencode" to { `in`: String -> URLEncoder.encode(`in`, Charset.defaultCharset()) },
+                    "yturl" to { `in`: String -> "https://www.youtube.com/results?search_query=${`in`.urlencode()}" },
                 )
             )
         }
@@ -120,6 +120,8 @@ fun Application.configureRouting() {
         }
     }
 }
+
+private fun String.urlencode() = URLEncoder.encode(this, Charset.defaultCharset())
 
 private suspend fun ApplicationCall.respondFreeMarker(template: String, model: Any?) =
     respond(FreeMarkerContent(template, model))
