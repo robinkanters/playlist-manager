@@ -4,13 +4,11 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
-import io.ktor.http.ContentType.Text.Html
 import io.ktor.http.HttpHeaders.Location
 import io.ktor.http.HttpStatusCode.Companion.BadRequest
 import io.ktor.http.HttpStatusCode.Companion.Created
 import io.ktor.http.HttpStatusCode.Companion.Forbidden
 import io.ktor.http.HttpStatusCode.Companion.NotFound
-import io.ktor.http.HttpStatusCode.Companion.OK
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.locations.*
 import io.ktor.locations.post
@@ -94,9 +92,20 @@ fun Application.configureRouting() {
         }
 
         post<Songs.Create> {
-            call.respondText(Html, OK) {
-                val data = Songs.Create.parsePayload(call.receiveParameters())
-                playlistSongController.create(it, data)
+            val data = Songs.Create.parsePayload(call.receiveParameters())
+            if (playlistSongController.create(it, data)) {
+                val playlistUrl = call.locations.href(Playlists.Edit(it.parent.name))
+                call.respondFreeMarker(
+                    "song_created",
+                    mapOf(
+                        "playlist" to it.parent.name,
+                        "addmoreurl" to call.locations.href(Songs.New(it.parent)),
+                        "playlisturl" to playlistUrl,
+                    )
+                )
+            } else {
+                log.info("Could not create playlist for ${it.parent.name}: $data")
+                call.redirect(BadRequest, call.locations.href(Songs.New(it.parent)))
             }
         }
 

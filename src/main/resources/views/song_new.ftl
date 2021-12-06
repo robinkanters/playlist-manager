@@ -15,7 +15,7 @@
                     validClass: "valid success-alert",
                     rules: {
                         query: {
-                            min: 3,
+                            minlength: 3,
                             required: {
                                 depends: () => !$shuffle.is(':checked')
                             }

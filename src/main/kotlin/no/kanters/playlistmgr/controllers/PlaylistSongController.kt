@@ -1,23 +1,25 @@
 package no.kanters.playlistmgr.controllers
 
-import io.ktor.locations.*
-import kotlinx.html.*
-import kotlinx.html.FormMethod.post
-import kotlinx.html.InputType.submit
-import kotlinx.html.InputType.text
-import no.kanters.playlistmgr.log
+import no.kanters.playlistmgr.logic.PlaylistUtils
+import no.kanters.playlistmgr.models.PlaylistEntry
+import no.kanters.playlistmgr.plugins.InvalidPayloadException
 import no.kanters.playlistmgr.routing.Songs
+import java.net.URI
 
 object PlaylistSongController {
     const val parameterName = "name"
 
     data class NewPayload(val playlistName: String)
 
-    fun create(data: Songs.Create, payload: Songs.Create.Companion.Payload): String {
-        log.info(data.parent.toString())
-        log.info(payload.toString())
+    fun create(data: Songs.Create, payload: Songs.Create.Companion.Payload): Boolean {
+        val entry = when (payload.type) {
+            "url" -> PlaylistEntry.UriLiteral(URI.create(payload.query), payload.comment)
+            "ytsearch" -> PlaylistEntry.YoutubeSearch(payload.query, payload.comment)
+            "shuffle" -> PlaylistEntry.Shuffle
+            else -> throw InvalidPayloadException
+        }
 
-        TODO()
+        return PlaylistUtils.appendEntry(data.parent, entry)
     }
 }
 

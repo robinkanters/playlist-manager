@@ -2,7 +2,9 @@ package no.kanters.playlistmgr.logic
 
 import no.kanters.playlistmgr.models.PlaylistEntry
 import no.kanters.playlistmgr.models.PlaylistEntry.*
+import no.kanters.playlistmgr.routing.Songs
 import java.io.File
+import java.io.IOException
 import java.net.URI
 import kotlin.io.path.Path
 import kotlin.io.path.listDirectoryEntries
@@ -15,7 +17,9 @@ object PlaylistUtils {
 
     fun create(name: String) = if (File(path, "${name}.txt").createNewFile()) name else null
 
-    fun read(name: String) = Path(path).resolve("$name.txt").toFile().readLines()
+    fun read(name: String) = getFile(name).readLines()
+
+    private fun getFile(name: String) = Path(path).resolve("$name.txt").toFile()
 
     tailrec fun parse(
         lines: List<String>,
@@ -56,4 +60,31 @@ object PlaylistUtils {
 
     private infix fun String.startsWith(prefix: String) =
         regionMatches(0, prefix, 0, prefix.length, false)
+
+    fun appendEntry(parent: Songs, entry: PlaylistEntry): Boolean {
+        val commentLine = entry.comment?.let { "# $it" } ?: ""
+        val textContent = when (entry) {
+            is YoutubeSearch -> {
+                "$commentLine\nytsearch:${entry.query}"
+            }
+            is UriLiteral -> {
+                "$commentLine\n${entry.url}"
+            }
+            is Shuffle -> {
+                "$commentLine\n#shuffle"
+            }
+            is LineComment -> {
+                "#$commentLine"
+            }
+        }
+
+        return try {
+            val f = getFile(parent.name)
+            if (f.readLines().last().isNotBlank()) f.appendText("\n")
+            f.appendText("$textContent\n")
+            true
+        } catch (e: IOException) {
+            false
+        }
+    }
 }
