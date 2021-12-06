@@ -9,7 +9,11 @@
         ~(function ($) {
             $(() => {
                 const queryElements = $("#queryfields");
+                const testLink = $("#testlink");
                 const $shuffle = $("#shuffle");
+                const $urlField = $("#url");
+                const $radioButtons = $("#form_song_new input[type='radio']");
+                const $queryField = $("#query");
                 $("#form_song_new").validate({
                     errorClass: "error fail-alert",
                     validClass: "valid success-alert",
@@ -17,18 +21,32 @@
                         query: {
                             minlength: 3,
                             required: {
-                                depends: () => !$shuffle.is(':checked')
+                                depends: () => !$shuffle.prop("checked")
                             }
                         }
                     }
                 });
-                $("#form_song_new input[type='radio']").change(e => {
+                $radioButtons.change(e => {
                     $("#querylabel").text($(e.target).data("prettytype"));
                     queryElements.stop().show('slow');
                 });
                 $shuffle.change(() => {
                     queryElements.stop().hide('slow');
                 })
+                $radioButtons.change(updateTestLink);
+                $queryField.keyup(updateTestLink);
+
+                function updateTestLink() {
+                    const link =
+                        $urlField.prop("checked") && /^https?:\/\//.test($queryField.val()) ? $queryField.val()
+                            : $("#ytsearch").prop("checked") ? "https://www.youtube.com/results?search_query=" + encodeURIComponent($queryField.val())
+                            : null;
+                    testLink.attr('href', link);
+                    if (!link) testLink.stop().hide('slow');
+                    else testLink.stop().show('slow');
+                }
+
+                updateTestLink();
             })
         })(jQuery);
     </script>
@@ -77,6 +95,7 @@
                     <label for="query" id="querylabel">Query</label>
                     <br/>
                     <input type="text" name="query" id="query"/>
+                    <a href="#" id="testlink" style="display: none" target="_blank">Test -&gt;</a>
                 </div>
                 <div style="display: block">
                     <label for="comment">Comment (optional)</label>
