@@ -8,7 +8,7 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.css.*
-import kotlinx.css.Color.Companion.paleVioletRed
+import kotlinx.css.BorderStyle.solid
 import kotlinx.css.Color.Companion.red
 import kotlinx.css.Color.Companion.white
 import kotlinx.css.Display.block
@@ -27,10 +27,17 @@ private val stylesheet: CSSBuilder.() -> Unit = {
 
     "span.error" {
         display = block
-        backgroundColor = paleVioletRed
+        backgroundColor = Color("#FFCCCC")
         borderColor = red
-        borderStyle = BorderStyle.solid
+        borderStyle = solid
         borderWidth = 1.px
+        marginTop = 15.px
+        marginBottom = 15.px
+        padding(10.px)
+    }
+
+    "ul.playlist-entries li" {
+        margin(3.px, null)
     }
 
     "table.playlists tr > *" {

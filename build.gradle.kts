@@ -21,7 +21,6 @@ repositories {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
-    implementation("io.ktor:ktor-html-builder:$ktor_version")
     implementation("io.ktor:ktor-freemarker:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("org.jetbrains:kotlin-css-jvm:1.0.0-pre.129-kotlin-1.4.20")

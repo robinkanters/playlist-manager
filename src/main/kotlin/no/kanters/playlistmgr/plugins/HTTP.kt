@@ -2,10 +2,13 @@ package no.kanters.playlistmgr.plugins
 
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.sessions.*
+
+data class UserSession(val error: String? = null)
 
 fun Application.configureHTTP() {
-    install(HSTS) {
-        includeSubDomains = true
+    install(Sessions) {
+        cookie<UserSession>("session", SessionStorageMemory())
     }
     install(DefaultHeaders) {
         header("X-Engine", "Ktor") // will send this header with each response
@@ -16,8 +19,7 @@ fun Application.configureHTTP() {
         }
         deflate {
             priority = 10.0
-            minimumSize(1024) // condition
+            minimumSize(1024)
         }
     }
-
 }
