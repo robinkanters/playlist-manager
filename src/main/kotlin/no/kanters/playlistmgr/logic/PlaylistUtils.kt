@@ -62,7 +62,7 @@ object PlaylistUtils {
         regionMatches(0, prefix, 0, prefix.length, false)
 
     fun appendEntry(parent: Songs, entry: PlaylistEntry): Boolean {
-        val commentLine = entry.comment?.let { "# $it" } ?: ""
+        val commentLine = entry.comment?.orNullIfBlank()?.let { "# $it" } ?: ""
         val textContent = when (entry) {
             is YoutubeSearch -> {
                 "$commentLine\nytsearch:${entry.query}"
@@ -80,11 +80,14 @@ object PlaylistUtils {
 
         return try {
             val f = getFile(parent.name)
-            if (f.readLines().last().isNotBlank()) f.appendText("\n")
+            if (!f.readLines().lastOrNull().isNullOrBlank())
+                f.appendText("\n")
             f.appendText("$textContent\n")
             true
         } catch (e: IOException) {
             false
         }
     }
+
+    private fun String?.orNullIfBlank() = if (!isNullOrBlank()) this else null
 }
