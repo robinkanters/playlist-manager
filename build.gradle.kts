@@ -33,5 +33,5 @@ dependencies {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.freeCompilerArgs += "-Xuse-experimental=io.ktor.locations.KtorExperimentalLocationsAPI"
+    kotlinOptions.freeCompilerArgs += "-opt-in=io.ktor.locations.KtorExperimentalLocationsAPI"
 }
