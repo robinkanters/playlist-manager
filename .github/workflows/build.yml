@@ -17,7 +17,7 @@ jobs:
       - name: Build code
         run: |
           echo $VERSION > src/main/resources/views/_version.ftl
-          && ./gradlew installDist
+          ./gradlew installDist
       - name: docker login
         env:
           DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
