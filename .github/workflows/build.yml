@@ -9,19 +9,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ date "+%Y%m%d" }}-${{ echo ffac537e6cbbf934b08745a378932722df287a53 | cut -c1-7 | tr [:lower:] [:upper:] }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build code
-      run: ./gradlew installDist
-    - name: docker login
-      env:
-        DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
-        DOCKER_HUB_ACCESS_TOKEN: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
+      - uses: actions/checkout@v2
+      - name: Build code
+        run: |
+          echo $VERSION > src/main/resources/views/_version.ftl
+          && ./gradlew installDist
+      - name: docker login
+        env:
+          DOCKER_HUB_USERNAME: ${{secrets.DOCKER_HUB_USERNAME}}
+          DOCKER_HUB_ACCESS_TOKEN: ${{secrets.DOCKER_HUB_ACCESS_TOKEN}}
       run: |
         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_ACCESS_TOKEN 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag robinkanters/playlistmanager:$(date +%s) --tag robinkanters/playlistmanager:latest
-      
-    - name: Docker Push
-      run: docker push -a robinkanters/playlistmanager
+        - name: Build the Docker image
+          run: docker build . --file Dockerfile --tag robinkanters/playlistmanager:$VERSION --tag robinkanters/playlistmanager:latest
+
+        - name: Docker Push
+          run: docker push -a robinkanters/playlistmanager

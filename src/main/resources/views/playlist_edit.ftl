@@ -10,8 +10,15 @@
 <#macro content>
     <h2>Editing playlist '${playlist.name}'</h2>
     <div>
-        <a href="${backLink}">&lt; back</a> | <a href="${newLink}">add song</a>
-        <ul class="playlist-entries">
+        <a href="${backLink}" class="ui labeled icon button">
+            <i class="left arrow icon"></i>
+            back
+        </a>
+        <a href="${newLink}" class="ui primary right labeled icon button">
+            <i class="plus icon"></i>
+            add song
+        </a>
+        <ul class="playlist-entries ui bulleted list">
             <#list playlist.entries as entry>
                 <li>
                     <#if entry.comment?? && entry.comment?length &gt; 0 && getEntryType.invoke(entry) != 'LineComment'>

@@ -74,7 +74,7 @@ object PlaylistUtils {
                 "$commentLine\n#shuffle"
             }
             is LineComment -> {
-                "#$commentLine"
+                "# $commentLine"
             }
         }
 

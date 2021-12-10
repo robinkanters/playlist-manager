@@ -7,8 +7,11 @@
 
 <#macro content>
     <h2>Playlists</h2>
-    <a href="/playlists/new">New</a>
-    <table class="playlists">
+    <a href="/playlists/new" class="ui primary right labeled icon button">
+        <i class="plus icon"></i>
+        new
+    </a>
+    <table class="playlists ui celled table">
         <thead>
             <tr>
                 <th>Name</th>
@@ -19,7 +22,11 @@
             <#list playlists as pl>
                 <tr>
                     <td>${pl}</td>
-                    <td><a href="${link.invoke(pl)}">Edit</a></td>
+                    <td>
+                        <a href="${link.invoke(pl)}" class="ui mini button yellow">
+                            edit
+                        </a>
+                    </td>
                 </tr>
             </#list>
         </tbody>

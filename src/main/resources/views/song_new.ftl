@@ -8,30 +8,46 @@
     <script type="text/javascript">
         ~(function ($) {
             $(() => {
-                const queryElements = $("#queryfields");
+                const $form = $("#form_song_new");
+                const $queryElements = $("#queryfields");
                 const testLink = $("#testlink");
                 const $shuffle = $("#shuffle");
                 const $urlField = $("#url");
                 const $radioButtons = $("#form_song_new input[type='radio']");
                 const $queryField = $("#query");
-                $("#form_song_new").validate({
-                    errorClass: "error fail-alert",
-                    validClass: "valid success-alert",
-                    rules: {
-                        query: {
-                            minlength: 3,
-                            required: {
-                                depends: () => !$shuffle.prop("checked")
-                            }
-                        }
+
+                const validationRules = {
+                    query: {
+                        identifier: "query",
+                        rules: [
+                            {
+                                type: 'empty', prompt: 'You must provide a search'
+                            },
+                            {
+                                type: 'minLength[3]', prompt: 'Your search must be at least 3 characters'
+                            },
+                        ],
                     }
-                });
+                }
+
+                function addQueryValidation() {
+                    $form
+                        .form({
+                            fields: validationRules,
+                            inline: true,
+                            on: 'blur'
+                        });
+                }
+
+                addQueryValidation();
                 $radioButtons.change(e => {
                     $("#querylabel").text($(e.target).data("prettytype"));
-                    queryElements.stop().show('slow');
+                    $queryElements.stop().show("slow");
+                    $form.form("remove fields", ["query"]);
                 });
                 $shuffle.change(() => {
-                    queryElements.stop().hide('slow');
+                    $queryElements.stop().hide("slow");
+                    addQueryValidation();
                 })
                 $radioButtons.change(updateTestLink);
                 $queryField.keyup(updateTestLink);
@@ -42,8 +58,8 @@
                             : $("#ytsearch").prop("checked") ? "https://www.youtube.com/results?search_query=" + encodeURIComponent($queryField.val())
                             : null;
                     testLink.attr('href', link);
-                    if (!link) testLink.stop().fadeOut('fast');
-                    else testLink.stop().fadeIn('fast');
+                    if (!link) testLink.addClass("disabled");
+                    else testLink.removeClass("disabled");
                 }
 
                 updateTestLink();
@@ -78,31 +94,49 @@
 <#macro content>
     <div>
         <h2>New song in '${input.playlistName}'</h2>
-        <a href="${backLink}">&lt; back</a>
+        <a href="${backLink}" class="ui mini red labeled icon button">
+            <i class="x icon"></i>
+            abort
+        </a>
         <div>
-            <form method="post" id="form_song_new">
-                <div style="display: block">
-                    <input data-prettytype="URL" type="radio" name="type" value="url" id="url" checked/>
-                    <label for="url">URL</label>
-                    <br/>
-                    <input data-prettytype="Query" type="radio" name="type" value="ytsearch" id="ytsearch"/>
-                    <label for="ytsearch">YouTube Query</label>
-                    <br/>
-                    <input type="radio" name="type" value="shuffle" id="shuffle"/>
-                    <label for="shuffle">Shuffle Playlist</label>
+            <form method="post" id="form_song_new" class="ui form">
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input data-prettytype="URL" type="radio" name="type" value="url" id="url" checked/>
+                        <label for="url">URL</label>
+                    </div>
                 </div>
-                <div style="display: block" id="queryfields">
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input data-prettytype="Query" type="radio" name="type" value="ytsearch" id="ytsearch"/>
+                        <label for="ytsearch">YouTube Query</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui radio checkbox">
+                        <input type="radio" name="type" value="shuffle" id="shuffle"/>
+                        <label for="shuffle">Shuffle Playlist</label>
+                    </div>
+                </div>
+                <div class="field" id="queryfields">
                     <label for="query" id="querylabel">Query</label>
-                    <br/>
-                    <input type="text" name="query" id="query"/>
-                    <a href="#" id="testlink" style="display: none" target="_blank">Test -&gt;</a>
+                    <div class="ui right labeled input">
+                        <input type="text" name="query" id="query" class="ui input"/>
+                        <a href="#" class="ui label green icon right labeled button" id="testlink" target="_blank">
+                            Test
+                            <i class="rocket icon"></i>
+                        </a>
+                    </div>
                 </div>
-                <div style="display: block">
+                <div class="field">
                     <label for="comment">Comment (optional)</label>
-                    <br/>
-                    <input class="mandatory" type="text" name="comment" id="comment"/>
+                    <div class="ui labeled input">
+                        <input class="mandatory" type="text" name="comment" id="comment"/>
+                    </div>
                 </div>
-                <input type="submit" value="Create!"/>
+                <div class="field">
+                    <input type="submit" value="create" class="ui button primary"/>
+                </div>
             </form>
         </div>
     </div>

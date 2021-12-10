@@ -8,12 +8,22 @@
 <#macro content>
     <div>
         <h2>Create a playlist</h2>
-        <a href="${backLink}">&lt; back</a>
         <#if error??>
             <span class="error">${error}</span>
         </#if>
-        <form action="${createLink}" method="post"><label for="name">Name:</label><br><input type="text"
-                                                                                             name="name"><br><input
-                    type="submit" value="Create!"></form>
+        <form action="${createLink}" method="post" class="ui form">
+            <div class="field">
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name"/>
+            </div>
+            <a href="${backLink}" class="ui labeled icon button">
+                <i class="left arrow icon"></i>
+                cancel
+            </a>
+            <button type="submit" class="ui right labeled icon primary button">
+                <i class="icon attached arrow right"></i>
+                create
+            </button>
+        </form>
     </div>
 </#macro>

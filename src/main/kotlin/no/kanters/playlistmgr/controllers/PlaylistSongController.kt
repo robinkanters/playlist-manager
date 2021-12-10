@@ -12,9 +12,16 @@ object PlaylistSongController {
     data class NewPayload(val playlistName: String)
 
     fun create(data: Songs.Create, payload: Songs.Create.Companion.Payload): Boolean {
+
         val entry = when (payload.type) {
-            "url" -> PlaylistEntry.UriLiteral(URI.create(payload.query), payload.comment)
-            "ytsearch" -> PlaylistEntry.YoutubeSearch(payload.query, payload.comment)
+            "url" -> {
+                if (payload.query.length < 3) return false
+                PlaylistEntry.UriLiteral(URI.create(payload.query), payload.comment)
+            }
+            "ytsearch" -> {
+                if (payload.query.length < 3) return false
+                PlaylistEntry.YoutubeSearch(payload.query, payload.comment)
+            }
             "shuffle" -> PlaylistEntry.Shuffle
             else -> throw InvalidPayloadException
         }

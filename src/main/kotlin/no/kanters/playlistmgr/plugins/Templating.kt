@@ -13,10 +13,23 @@ import kotlinx.css.Color.Companion.red
 import kotlinx.css.Color.Companion.white
 import kotlinx.css.Display.block
 import kotlinx.css.FontStyle.Companion.italic
+import kotlinx.css.LinearDimension.Companion.auto
+import kotlinx.css.Position.fixed
+import kotlinx.css.properties.lh
 
 private val stylesheet: CSSBuilder.() -> Unit = {
+    html {
+        width = 100.pct
+    }
     body {
         backgroundColor = white
+        width = 100.pct
+    }
+
+    "body>#content" {
+        paddingTop = 15.px
+        margin(horizontal = auto)
+        maxWidth = 1200.px
     }
 
     "span.comment" {
@@ -40,9 +53,19 @@ private val stylesheet: CSSBuilder.() -> Unit = {
         margin(3.px, null)
     }
 
-    "table.playlists tr > *" {
-        border = "3px double black"
-        padding(5.px)
+    "body>div.footer" {
+        position = fixed
+        bottom = 0.px
+        left = 0.px
+        height = 64.px
+        lineHeight = 64.px.lh
+        width = 100.pct
+        color = hex(0x333333)
+        backgroundColor = hex(0xCCCCCC)
+    }
+
+    "body>div.footer .version" {
+        margin(horizontal = 16.px)
     }
 }
 
