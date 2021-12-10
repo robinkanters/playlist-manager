@@ -8,8 +8,14 @@
 <#macro content>
     <div>
         <h2>New song added to ${playlist}!</h2>
-        <a href="${addmoreurl}">&lt; add more</a>
+        <a href="${addmoreurl}" class="ui labeled icon button">
+            <i class="plus icon"></i> add more
+        </a>
         <br/>
-        <a href="${playlisturl}">&gt; view playlist</a>
+        <br/>
+        <a href="${playlisturl}" class="ui right labeled icon button">
+            view playlist
+            <i class="right arrow icon"></i>
+        </a>
     </div>
 </#macro>
