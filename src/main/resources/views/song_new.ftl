@@ -43,11 +43,11 @@
                 $radioButtons.change(e => {
                     $("#querylabel").text($(e.target).data("prettytype"));
                     $queryElements.stop().show("slow");
-                    $form.form("remove fields", ["query"]);
+                    addQueryValidation();
                 });
                 $shuffle.change(() => {
                     $queryElements.stop().hide("slow");
-                    addQueryValidation();
+                    $form.form("remove fields", ["query"]);
                 })
                 $radioButtons.change(updateTestLink);
                 $queryField.keyup(updateTestLink);
