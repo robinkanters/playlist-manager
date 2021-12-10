@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set version var
-        run: echo "VERSION="$(date "+%Y%m%d")-$(echo $GITHUB_SHA | cut -c1-7 | tr [:lower:] [:upper:])" >> $GITHUB_ENV
+        run: echo "VERSION=$(date "+%Y%m%d")-$(echo $GITHUB_SHA | cut -c1-7 | tr [:lower:] [:upper:])" >> $GITHUB_ENV
       - name: Build code
         run: |
           echo $VERSION > src/main/resources/views/_version.ftl
