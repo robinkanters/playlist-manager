@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      VERSION: ${{ date "+%Y%m%d" }}-${{ echo ffac537e6cbbf934b08745a378932722df287a53 | cut -c1-7 | tr [:lower:] [:upper:] }}
+      VERSION: ${{ date "+%Y%m%d" }}-${{ echo $GITHUB_SHA | cut -c1-7 | tr [:lower:] [:upper:] }}
 
     steps:
       - uses: actions/checkout@v2
